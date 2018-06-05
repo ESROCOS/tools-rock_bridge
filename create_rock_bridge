@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# H2020 ESROCOS Project
+# Company: GMV Aerospace & Defence S.A.U.
+# Licence: GPLv2
+
 import os
 import sys
 from subprocess import call
@@ -10,7 +14,7 @@ from rockBridgeModule import bridgeModule
 if __name__ == "__main__":	
 	
 	if len(sys.argv) != 3:
-		print("Error running the script. python3 script.py absolute/path/taste_proyect nameFunction")
+		print("Error running the script. create_rock_bridge absolute/path/taste_proyect nameFunction")
 		sys.exit(0)
 	
 	taste_path = sys.argv[1]
@@ -21,7 +25,6 @@ if __name__ == "__main__":
 	print("taste_path:" + taste_path)
 	print("func_name:" + func_name)
 	print("iv_path:" + iv_path)
-	help(bridgeModule)
 	
 	# Load config data from iv.py
 	if not os.path.isfile(iv_path):
@@ -46,7 +49,7 @@ if __name__ == "__main__":
 	
 	#ejecutar orogen (crea esqueletos)
 	os.system("cd " + func_name + "; rock-create-orogen; amake")
-	"""		
+	
 	#generate task/CMakeLists.txt
 	with open(str(func_name) + "/tasks/CMakeLists.txt", 'a') as file:
 		file.write('\nTARGET_LINK_LIBRARIES(${' + func_name.upper() + '_TASKLIB_NAME} -L$ENV{AUTOPROJ_CURRENT_ROOT}/install/lib -lbase_support -lx86_partition)\n')
@@ -81,7 +84,7 @@ if __name__ == "__main__":
 
 
 	#generate .so and copy to install
-	"""
+	
 	
 	sys.exit(0)
 

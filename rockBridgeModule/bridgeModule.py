@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-#python3 script.py ~/esrocos_workspace/tools/rock_bridge/taste-example/camera-taste camera_rock_bridge
-
+# H2020 ESROCOS Project
+# Company: GMV Aerospace & Defence S.A.U.
+# Licence: GPLv2
 
 import os
 from mako.template import Template
