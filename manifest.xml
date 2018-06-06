@@ -1,0 +1,11 @@
+<package>
+    <description brief="Bridge between Rock and TASTE">
+        Provides a script that create a Rock orogen and edit
+        some TASTE code to create the bridge.
+    </description>
+    <author>GMV Aerospace &amp; Defence S.A.U.</author>
+    <copyright>GMV 2018</copyright>
+    <license>GPLv2</license>
+    <depend package="tools/config" />
+    <depend package="types/base" />
+</package>
