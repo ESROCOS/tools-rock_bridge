@@ -12,3 +12,5 @@ Installation
 ------------
 Having loaded the environment variables of ESROCOS:
 from the main directory, run amake and the executable will be installed.
+
+Usage information in the tool wiki.
