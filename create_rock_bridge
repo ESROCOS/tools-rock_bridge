@@ -7,25 +7,27 @@
 import os
 import sys
 from subprocess import call
+import shutil
 
 from rockBridgeModule import bridgeModule
 
            
 if __name__ == "__main__":	
 	
-	if len(sys.argv) != 4:
+	if len(sys.argv) != 5:
 		print("Error running the script!")
 		print("Usage:")
-		print("\tUsage: create_rock_bridge absolute/path/iv.py absolute/path/taste_skeletons function_name")
+		print("\tUsage: create_rock_bridge absolute/path/taste_skeletons function_name absolute/path/iv.py  absolute/path/library.so")
 		sys.exit(0)
 	
-	taste_path = sys.argv[2]
-	func_name = sys.argv[3]
-	iv_path = sys.argv[1]
+	taste_path = sys.argv[1]
+	func_name = sys.argv[2]
+	iv_path = sys.argv[3]
+	lib_path = sys.argv[4]
 	
 	while True:
 		print("Generating rock bridge for " + func_name + "function. A folder with the function name will be created.")
-		print("Also, this process will override the code of the " + func_name + " function and the user_pre_init.sh file.")
+		print("Also, this process will override the code of the " + func_name + " function and the user_pre_init.sh file. (.old files will be created)")
 		
 		try:
 			confirmation = input("Do you want to continue? [y/n]")
@@ -34,75 +36,108 @@ if __name__ == "__main__":
 			if confirmation == 'n':
 				sys.exit(0)
 			else:
-				print("Bad answer\n------------\n\n")
+				print("Bad answer\n------------\n")
 		except Exception:
-			print("Bad answer\n------------\n\n")
+			print("Bad answer\n------------\n")
 
 	print(" --> taste_path:" + taste_path)
 	print(" --> func_name:" + func_name)
 	print(" --> iv_path:" + iv_path)
+
 	
 	# Load config data from iv.py
 	if not os.path.isfile(iv_path):
-		print('Error: ' + iv_path + 'file doesn\'t exist')
+		print('Error: ' + iv_path + 'file does not exist')
 		sys.exit(0)
-		
+
 	if not os.path.isdir(taste_path + '/' + func_name):
 		print('Error: ' + taste_path + func_name + ' function not found.')
 		sys.exit(0)
 			
+	if not os.path.isfile(lib_path):
+		print('Error: ' + lib_path + ' not found')
+		sys.exit(0)
 
 	#create orogen proyect
 	call(["rock-create-orogen", func_name])
+
+	if not os.path.isfile(func_name + "/manifest.xml"):
+		print('Error: ' + func_name + "/manifest.xml not found. Delete folder and rerun the script.")
+		sys.exit(0)
 	
-	
+	#copy lib to function.so in install folder
+	print("[INFO] Installing taste DLL to " + os.environ['AUTOPROJ_CURRENT_ROOT'] + '/install/lib')
+	shutil.copy2(lib_path, os.environ['AUTOPROJ_CURRENT_ROOT'] + '/install/lib/lib' + func_name + '.so')
+
 	#generar orogen 
-	bridgeModule.generate_orogen(func_name, iv_path)
+	if( False == bridgeModule.generate_orogen(func_name, iv_path)):
+		print("[ERROR] Error generating orogen files.")
+		sys.exit(0)
 	
-	
-	call(["cp", "output/"+func_name+".orogen", func_name+"/"+func_name+".orogen"])
-	
+	print("[INFO] Generating skelentons of orogen task.")
+	shutil.copy2("output/" + func_name + ".orogen", func_name + "/" + func_name + ".orogen")
 	
 	#ejecutar orogen (crea esqueletos)
-	os.system("cd " + func_name + "; rock-create-orogen; amake")
+	os.system("cd " + func_name + "; rock-create-orogen")
 	
-	sys.exit(0)
-
 	#generate task/CMakeLists.txt
+	print("[INFO] Updating orogen task CmakeLists.txt of " + func_name)
 	with open(str(func_name) + "/tasks/CMakeLists.txt", 'a') as file:
-		file.write('\nTARGET_LINK_LIBRARIES(${' + func_name.upper() + '_TASKLIB_NAME} -L$ENV{AUTOPROJ_CURRENT_ROOT}/install/lib -lbase_support -lx86_partition)\n')
-		file.writelines('TARGET_INCLUDE_DIRECTORIES(${' + func_name.upper() + '_TASKLIB_NAME} PUBLIC $ENV{AUTOPROJ_CURRENT_ROOT}/install/include ' + taste_path + '/' + func_name+')\n')
+		file.write('\nTARGET_LINK_LIBRARIES(${' + func_name.upper() + '_TASKLIB_NAME} \n\tbase_support \n\t' + func_name + ')\n')
+		file.writelines('TARGET_INCLUDE_DIRECTORIES(${' + func_name.upper() + '_TASKLIB_NAME} PUBLIC $ENV{AUTOPROJ_CURRENT_ROOT}/install/include ' + taste_path + '/' + func_name+'/dataview)\n')
 
 	#sobreescribir ficheros task
-	bridgeModule.generate_task_output(func_name, iv_path)
-	call(["cp", "output/tasks/"+func_name+"_task.cpp", func_name + "/tasks/"+func_name+"_task.cpp"])
-	call(["cp", "output/tasks/"+func_name+"_task.hpp", func_name + "/tasks/"+func_name+"_task.hpp"])
-	os.system("cd ./" + func_name + "; amake")
+	print("[INFO] Generating orogen task files of " + func_name)
+	if( False == bridgeModule.generate_task_output(func_name, iv_path)):
+		print("[ERROR] Error generating orogen task files.")
+		sys.exit(0)
+
+	shutil.copy2("output/tasks/"+func_name+"_task.cpp", func_name + "/tasks/"+func_name+"_task.cpp")
+	shutil.copy2("output/tasks/"+func_name+"_task.hpp", func_name + "/tasks/"+func_name+"_task.hpp")
+	os.system("cd " + func_name + "; amake")
 	
 	#taste files
-	bridgeModule.generate_task_taste(func_name, iv_path)
-	call(["cp", taste_path+"/"+func_name+"/"+func_name+".cc", taste_path+"/"+func_name+"/"+func_name+".cc.old"])
-	call(["cp", "output/"+func_name+".cc", taste_path+"/"+func_name+"/"+func_name+".cc"])
+	print("[INFO] Generating taste source and header of " + func_name)
+	if( False == bridgeModule.generate_task_taste(func_name, iv_path)):
+		print("[ERROR] Error generating taste files.")
+		sys.exit(0)
+
+	shutil.copy2(taste_path+"/"+func_name+"/"+func_name+".cc", taste_path+"/"+func_name+"/"+func_name+".cc.old")
+	shutil.copy2("output/"+func_name+".cc", taste_path+"/"+func_name+"/"+func_name+".cc")
 	
+	shutil.rmtree('output/', ignore_errors=True)
+
 	#taste pre-init
 	pre_init = taste_path + "/user_init_pre.sh"
+	print("[INFO] Generating " + pre_init)
 	if os.path.isfile(pre_init):
+		shutil.copy2(pre_init, pre_init+".old")
 		with open(pre_init, 'a') as file:
-			file.write('\nORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + taste_path + "/" + func_name + "/" + '\" \n')
-			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/\" \n')	
+			file.write('\nORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/\" \n')	
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/orocos/\" \n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/orocos/lib' + func_name + '-tasks-gnulinux.so\" \n')
 	else:
 		with open(pre_init, 'x') as file:
 			file.write('#!/bin/sh\n\n')
-			file.write('\nORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + taste_path + "/" + func_name + "/" + '\" \n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/\" \n')	
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/orocos/\" \n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/orocos/lib' + func_name + '-tasks-gnulinux.so\" \n')
 
+	init_last = taste_path + "/user_init_last.sh"
+	print("[INFO] Generating " + init_last)
+	if os.path.isfile(init_last):
+		shutil.copy2(init_last, init_last+".old")
+		with open(init_last, 'a') as file:
+			file.write('\necho [INFO] Copying lib.so generated to ' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/lib' + func_name + '.so\n')
+			file.write('cp ' + lib_path + ' ' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/lib' + func_name + '.so\n')
+	else:
+		with open(init_last, 'x') as file:
+			file.write('#!/bin/sh\n\n')
+			file.write('echo [INFO] Copying lib.so generated to ' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/lib' + func_name + '.so\n')
+			file.write('cp ' + lib_path + ' ' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/lib' + func_name + '.so\n')
 
 	#generate .so and copy to install
-	
+	print("[INFO] Now you should compile again the TASTE model.")
 	
 	sys.exit(0)
 

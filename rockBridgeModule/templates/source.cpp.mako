@@ -24,23 +24,16 @@ def includesType():
 %>
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
-//JMSM
-
-
 #include "${tasteFunc}_task.hpp"
-
-
 
 ${includesType()}
 
-//#include <${tasteFunc}.h> //include TASTE function header
 #include <thread>
 
-
-camera_rock_bridge::camera_rock_bridge_task * ${tasteFunc}_task_instance;
+camera_rock_bridge::camera_rock_bridge_task * ${tasteFunc}_task_instance = NULL;
 
 extern "C" { 
-	extern int init_taste(void);
+	extern int aadl_start(void);
 	
 	%for i in iv.list_ri(tasteFunc):
 	extern void ${tasteFunc}_RI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} *);
@@ -51,22 +44,28 @@ using namespace ${tasteFunc};
 
 void load_taste()
 {
-	init_taste();
+	aadl_start();
 }
 
 
 ${tasteFunc}_task::${tasteFunc}_task(std::string const& name, TaskCore::TaskState initial_state)
     : ${tasteFunc}_taskBase(name, initial_state)
 {	
-	${tasteFunc}_task_instance = this;
-
+	if(${tasteFunc}_task_instance == NULL)
+	{
+		${tasteFunc}_task_instance = this;
+	}
+	
 	std::thread (load_taste).detach();
 }
 
 ${tasteFunc}_task::${tasteFunc}_task(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
     : ${tasteFunc}_taskBase(name, engine, initial_state)
 {
-	${tasteFunc}_task_instance = this;
+	if(${tasteFunc}_task_instance == NULL)
+	{
+		${tasteFunc}_task_instance = this;
+	}
 
 	std::thread (load_taste).detach();
 }

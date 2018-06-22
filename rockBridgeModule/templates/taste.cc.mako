@@ -8,10 +8,11 @@
 /* User code: This file will not be overwritten by TASTE. */
 
 #include "${tasteFunc}.h"
+#include <stdio.h>
 
 #include "${tasteFunc}/${tasteFunc}_task.hpp"
 
-extern ${tasteFunc}::${tasteFunc}_task * ${tasteFunc}_task_instance = NULL;
+extern ${tasteFunc}::${tasteFunc}_task * ${tasteFunc}_task_instance;
 
 
 void ${tasteFunc}_startup()
@@ -22,7 +23,7 @@ void ${tasteFunc}_startup()
 }
 
 %for i in iv.list_pi(tasteFunc):
-void ${tasteFunc}_PI_controlCamera(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}  *IN_${iv.get_in_param_idx(tasteFunc, i, 0)})
+void ${tasteFunc}_PI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}  *IN_${iv.get_in_param_idx(tasteFunc, i, 0)})
 {
 	if(${tasteFunc}_task_instance != NULL)
 	{

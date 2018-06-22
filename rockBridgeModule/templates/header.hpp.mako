@@ -24,8 +24,9 @@ def taste2CRockType(type):
 
 #include "${tasteFunc}/${tasteFunc}_taskBase.hpp"
 
-#define __C_DATAVIEW_UNIQ_H__
-#include <dataview/dataview-uniq.h>
+#if(!defined(GENERATED_ASN1SCC_DATAVIEW_UNIQ_H) && !defined(GENERATED_ASN1SCC_dataview_uniq_H))
+#include <dataview-uniq.h>
+#endif
 
 namespace ${tasteFunc}{
 

@@ -25,31 +25,28 @@ def generate_orogen(tasteFunction, ivPath):
 
 	outOrogenFile = os.path.join('output', tasteFunction+'.orogen')
 	
-	print(orogenTemplate)
-	print(outOrogenFile)
-
-
 	#Load iv.py
 	ivObj = IvData(ivPath)
 	
 	#Check all interfaces are sporadic
-	'''
+	
 	try:
-		if len(ivObj.list_interfaces(tasteFunction)) != (len(ivObj.list_sporadic_pi(tasteFunction)) + len(ivObj.list_sporadic_ri(tasteFunction))):
-			perror('Error all interfaces must be sporadics')
-			return False
+		for iface in ivObj.list_interfaces(tasteFunction):
+			if( len(ivObj.list_in_params(tasteFunction, iface)) + len(ivObj.list_out_params(tasteFunction, iface)) != 1):
+				perror('ERROR] Each interface must have one parameter.')
+				return False
 	except:	
-		perror('Error error, function not found')
+		perror('[ERROR] Each interface must have one parameter.')
 		return False
-	'''
+	
 		
 	# Render templates
 	try:
 		template = Template(filename=orogenTemplate)
 		outOrogen = template.render(iv=ivObj, tasteFunc=tasteFunction)
 	except:
-		perror('Error generating {}:'.format(outOrogenFile))
-		raise 
+		perror('[ERROR] Error generating {}:'.format(outOrogenFile))
+		return False 
 
 	# Write file   
 	try:
@@ -58,8 +55,8 @@ def generate_orogen(tasteFunction, ivPath):
 		with open(outOrogenFile, 'w') as fd:
 			fd.write(outOrogen)
 	except Exception as err:
-		perror('Error writing code to {}:\n{}'.format(outOrogenFile, err))
-		return
+		perror('[ERROR] Error writing code to {}:\n{}'.format(outOrogenFile, err))
+		return False
 		
 	return True
 
@@ -80,15 +77,15 @@ def generate_task_output(tasteFunction, ivPath):
 		template = Template(filename=headerTemplate)
 		outHeader = template.render(iv=ivObj, tasteFunc=tasteFunction)
 	except:
-		perror('Error generating {}:'.format(headerTemplate))
-		raise
+		perror('[ERROR] Error generating {}:'.format(headerTemplate))
+		return False
 
 	try:
 		template = Template(filename=srcTemplate)
 		outSrc = template.render(iv=ivObj, tasteFunc=tasteFunction)
 	except:
-		perror('Error generating {}:'.format(outSrcFile))
-		raise
+		perror('[ERROR] Error generating {}:'.format(outSrcFile))
+		return False
 	
 	
 	# Write files
@@ -98,8 +95,8 @@ def generate_task_output(tasteFunction, ivPath):
 		with open(outHeaderFile, 'w') as fd:
 			fd.write(outHeader)
 	except Exception as err:
-		perror('Error writing code to {}:\n{}'.format(outHeaderFile, err))
-		return
+		perror('[ERROR] Error writing code to {}:\n{}'.format(outHeaderFile, err))
+		return False
 
 	try:
 		if not os.path.exists(os.path.dirname(outSrcFile)):
@@ -107,8 +104,10 @@ def generate_task_output(tasteFunction, ivPath):
 		with open(outSrcFile, 'w') as fd:
 			fd.write(outSrc)
 	except Exception as err:
-		perror('Error writing code to {}:\n{}'.format(outSrcFile, err))
-		return
+		perror('[ERROR] Error writing code to {}:\n{}'.format(outSrcFile, err))
+		return False
+
+	return True
    
 def generate_task_taste(tasteFunction, ivPath): 
 	# File paths
@@ -125,8 +124,8 @@ def generate_task_taste(tasteFunction, ivPath):
 		template = Template(filename=tasteTemplate)
 		outTaste = template.render(iv=ivObj, tasteFunc=tasteFunction)
 	except:
-		perror('Error generating {}:'.format(outTasteFile))
-		raise 
+		perror('[ERROR] Error generating {}:'.format(outTasteFile))
+		return False 
 
 	# Write file   
 	try:
@@ -135,8 +134,8 @@ def generate_task_taste(tasteFunction, ivPath):
 		with open(outTasteFile, 'w') as fd:
 			fd.write(outTaste)
 	except Exception as err:
-		perror('Error writing code to {}:\n{}'.format(outTasteFile, err))
-		return
+		perror('[ERROR] Error writing code to {}:\n{}'.format(outTasteFile, err))
+		return False
 		
 	return True	
            
