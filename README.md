@@ -10,5 +10,5 @@ GPLv2
 
 Installation
 ------------
-Having loaded the enrionmental variables of ESROCOS:
+Having loaded the environment variables of ESROCOS:
 from the main directory, run amake and the executable will be installed.
