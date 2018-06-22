@@ -17,3 +17,5 @@ install(
     PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_READ
 )
 
+# Install camera_simulator orogen
+add_subdirectory(test/camera_simulator)

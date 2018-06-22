@@ -1,0 +1,20 @@
+PACKAGE process_package_proxy
+PUBLIC
+WITH process_package;
+WITH AI;
+
+SYSTEM deploymentview
+EXTENDS process_package::deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.final
+EXTENDS process_package::deploymentview.final
+PROPERTIES
+  AI::root_system => "SELECTED";
+  Stack_Size => 100kbyte APPLIES TO x86_partition.camera_rock_bridge;
+  Stack_Size => 100kbyte APPLIES TO x86_partition.vt_pus_setcamerareport;
+  Stack_Size => 100kbyte APPLIES TO x86_partition.vt_pus_run;
+END deploymentview.final;
+
+END process_package_proxy;
+

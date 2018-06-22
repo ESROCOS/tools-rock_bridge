@@ -1,0 +1,225 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::camera_rock_bridge
+PUBLIC
+
+WITH interfaceview::IV::pus;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_setFrameRequest
+FEATURES
+  dummy : IN PARAMETER DataView::T_UInt64 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_setFrameRequest;
+
+SUBPROGRAM IMPLEMENTATION PI_setFrameRequest.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_setFrameRequest.others;
+
+SUBPROGRAM RI_setImage
+FEATURES
+  image : IN PARAMETER DataView::Base_samples_frame_Frame {
+    Taste::encoding => NATIVE;
+  };
+END RI_setImage;
+
+SUBPROGRAM IMPLEMENTATION RI_setImage.others
+END RI_setImage.others;
+
+SUBPROGRAM RI_setCameraReport
+FEATURES
+  errorCode : IN PARAMETER DataView::T_UInt64 {
+    Taste::encoding => NATIVE;
+  };
+END RI_setCameraReport;
+
+SUBPROGRAM IMPLEMENTATION RI_setCameraReport.others
+END RI_setCameraReport.others;
+
+SYSTEM camera_rock_bridge
+FEATURES
+  PI_setFrameRequest : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::camera_rock_bridge::PI_setFrameRequest.others {
+    Taste::coordinates => "165557 75127";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "setFrameRequest";
+  };
+  RI_setImage : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::pus::PI_setImage.others {
+    Taste::coordinates => "152014 55760";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "setImage";
+    Taste::labelInheritance => "true";
+  };
+  RI_setCameraReport : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::pus::PI_setCameraReport.others {
+    Taste::coordinates => "185871 75127";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "setCameraReport";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+END camera_rock_bridge;
+
+SYSTEM IMPLEMENTATION camera_rock_bridge.others
+SUBCOMPONENTS
+  fpic : DATA DataView::TASTE_Directive {
+    Taste::FS_Default_Value => "compiler-option:""-fPIC""";
+  };
+  orocos_target : DATA DataView::TASTE_Directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET&eq;gnulinux""";
+  };
+END camera_rock_bridge.others;
+
+END interfaceview::IV::camera_rock_bridge;
+
+PACKAGE interfaceview::IV::pus
+PUBLIC
+
+WITH interfaceview::IV::camera_rock_bridge;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_setImage
+FEATURES
+  image : IN PARAMETER DataView::Base_samples_frame_Frame {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_setImage;
+
+SUBPROGRAM IMPLEMENTATION PI_setImage.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_setImage.others;
+
+SUBPROGRAM PI_setCameraReport
+FEATURES
+  errorCode : IN PARAMETER DataView::T_UInt64 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_setCameraReport;
+
+SUBPROGRAM IMPLEMENTATION PI_setCameraReport.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_setCameraReport.others;
+
+SUBPROGRAM PI_run
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_run;
+
+SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run.others;
+
+SUBPROGRAM RI_setFrameRequest
+FEATURES
+  dummy : IN PARAMETER DataView::T_UInt64 {
+    Taste::encoding => NATIVE;
+  };
+END RI_setFrameRequest;
+
+SUBPROGRAM IMPLEMENTATION RI_setFrameRequest.others
+END RI_setFrameRequest.others;
+
+SYSTEM pus
+FEATURES
+  PI_setImage : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::pus::PI_setImage.others {
+    Taste::coordinates => "125821 96993";
+    Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "setImage";
+  };
+  PI_setCameraReport : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::pus::PI_setCameraReport.others {
+    Taste::coordinates => "125821 115612";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "setCameraReport";
+  };
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::pus::PI_run.others {
+    Taste::coordinates => "104722 90412";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 5000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run";
+  };
+  RI_setFrameRequest : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::camera_rock_bridge::PI_setFrameRequest.others {
+    Taste::coordinates => "125821 107737";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "setFrameRequest";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END pus;
+
+SYSTEM IMPLEMENTATION pus.others
+SUBCOMPONENTS
+  fpicPus : DATA DataView::TASTE_Directive {
+    Taste::FS_Default_Value => "compiler-option:""-fPIC""";
+  };
+END pus.others;
+
+END interfaceview::IV::pus;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::camera_rock_bridge;
+WITH interfaceview::IV::pus;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  camera_rock_bridge : SYSTEM interfaceview::IV::camera_rock_bridge::camera_rock_bridge.others {
+    Taste::coordinates => "152014 45207 198942 75127";
+  };
+  pus : SYSTEM interfaceview::IV::pus::pus.others {
+    Taste::coordinates => "81097 90412 125821 119545";
+  };
+CONNECTIONS
+  camera_rock_bridge_PI_setFrameRequest_pus_RI_setFrameRequest : SUBPROGRAM ACCESS camera_rock_bridge.PI_setFrameRequest -> pus.RI_setFrameRequest {
+    Taste::coordinates => "125821 107737 165557 107737 165557 75127";
+  };
+  pus_PI_setImage_camera_rock_bridge_RI_setImage : SUBPROGRAM ACCESS pus.PI_setImage -> camera_rock_bridge.RI_setImage {
+    Taste::coordinates => "152014 55760 140272 55760 140272 96993 125821 96993";
+  };
+  pus_PI_setCameraReport_camera_rock_bridge_RI_setCameraReport : SUBPROGRAM ACCESS pus.PI_setCameraReport -> camera_rock_bridge.RI_setCameraReport {
+    Taste::coordinates => "185871 75127 185871 115612 125821 115612";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

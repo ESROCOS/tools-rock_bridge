@@ -1,2 +1,11 @@
 build/*
 
+test/test_clean/*.zip
+test/test_clean/__*.aadl
+test/test_clean/*.md5
+test/test_clean/*.pro
+test/test_clean/*.old
+test/test_clean/binary.c
+
+test/camera_simulator/build/*
+

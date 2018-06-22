@@ -9,4 +9,5 @@
     <depend package="tools/config" />
     <depend package="types/base" />
     <depend package="types/base_support" />
+    <depend package="python3-mako" />
 </package>

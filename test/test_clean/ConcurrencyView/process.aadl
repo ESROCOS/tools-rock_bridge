@@ -1,0 +1,44 @@
+--  This file was generated automatically: DO NOT MODIFY IT !
+
+--  This file contains a part of the system CONCURRENCY VIEW.
+--  It is an input file for OCARINA.
+
+package process_package
+public
+	with Deployment;
+	with DataView;
+	with interfaceview::IV;
+	with deploymentview::DV;
+	with ocarina_processors_x86;
+	with camera_rock_bridge_CV_Thread;
+	with vt_pus_setcamerareport_CV_Thread;
+	with vt_pus_run_CV_Thread;
+
+process x86_partition extends deploymentview::DV::node1::x86_partition
+end x86_partition;
+
+process implementation x86_partition.final
+subcomponents
+	camera_rock_bridge : thread camera_rock_bridge_CV_Thread::camera_rock_bridge_camera_rock_bridge.others;
+	vt_pus_setcamerareport : thread vt_pus_setcamerareport_CV_Thread::vt_pus_setcamerareport_vt_pus_setcamerareport.others;
+	vt_pus_run : thread vt_pus_run_CV_Thread::vt_pus_run_vt_pus_run.others;
+connections
+	PORT camera_rock_bridge.OUTPORT_setCameraReport -> vt_pus_setcamerareport.INPORT_artificial_setCameraReport;
+	PORT camera_rock_bridge.OUTPORT_setFrameRequest_vt -> camera_rock_bridge.INPORT_setFrameRequest;
+	PORT vt_pus_setcamerareport.OUTPORT_setFrameRequest_vt -> camera_rock_bridge.INPORT_setFrameRequest;
+	PORT vt_pus_run.OUTPORT_setFrameRequest_vt -> camera_rock_bridge.INPORT_setFrameRequest;
+end x86_partition.final;
+
+system deploymentview
+end deploymentview;
+
+system implementation deploymentview.final
+subcomponents
+  x86_partition: process x86_partition.final;
+  node1_x86_linux_dll_cv : processor ocarina_processors_x86::x86.linux_dll;
+properties
+  Actual_Processor_Binding => (reference (node1_x86_linux_dll_cv)) applies to x86_partition;
+end deploymentview.final;
+end process_package;
+
+-- deploymentview.final

@@ -1,0 +1,29 @@
+--  This file was generated automatically: DO NOT MODIFY IT !
+
+--  This file contains a part of the system CONCURRENCY VIEW.
+--  It is an input file for OCARINA.
+
+package vt_pus_run_CV_Thread
+public
+	with Deployment;
+	with process_package;
+	with Dataview;
+
+THREAD vt_pus_run_vt_pus_run
+features
+	OUTPORT_setFrameRequest_vt : OUT EVENT DATA PORT DataView::T_UInt64_Buffer.impl;
+END vt_pus_run_vt_pus_run;
+
+THREAD IMPLEMENTATION vt_pus_run_vt_pus_run.others
+PROPERTIES
+	Initialize_Entrypoint_Source_Text => "pus_wrappers.C_Init_pus";
+	Compute_Entrypoint_Source_Text => "vt_pus_run_wrappers.artificial_run";
+	Dispatch_Protocol      => Periodic;
+	Period                 => 5000 ms;
+	Dispatch_Offset        => 0 ms;
+	Compute_Execution_Time => 0 ms .. 10 ms;
+	Stack_Size             => 5 KByte;
+	Priority               => 1;
+END vt_pus_run_vt_pus_run.others;
+
+end vt_pus_run_CV_Thread;
