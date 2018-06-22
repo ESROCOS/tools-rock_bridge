@@ -1,0 +1,15 @@
+name "camera_simulator"
+
+using_library "camera_ids"
+import_types_from "base"
+
+task_context "CameraDriver" do
+    
+    input_port "command", "uint64_t"
+    port_driven 'command'
+
+    output_port "image", "base/samples/frame/Frame"
+    output_port "observation", "uint64_t"
+end
+
+

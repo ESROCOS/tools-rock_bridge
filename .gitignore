@@ -6,3 +6,9 @@ test/test_clean/*.md5
 test/test_clean/*.pro
 test/test_clean/*.old
 test/test_clean/binary.c
+
+test/camera_simulator/build/*
+
+test/camera_simulator/templates/*
+test/camera_simulator/.orogen/*
+test/camera_simulator/.*.swp

@@ -16,7 +16,6 @@ if __name__ == "__main__":
 	
 	if len(sys.argv) != 5:
 		print("Error running the script!")
-		print("Usage:")
 		print("\tUsage: create_rock_bridge absolute/path/taste_skeletons function_name absolute/path/iv.py  absolute/path/library.so")
 		sys.exit(0)
 	
@@ -58,7 +57,7 @@ if __name__ == "__main__":
 		print('Error: ' + lib_path + ' not found')
 		sys.exit(0)
 
-	#create orogen proyect
+	#create orogen project
 	call(["rock-create-orogen", func_name])
 
 	if not os.path.isfile(func_name + "/manifest.xml"):
