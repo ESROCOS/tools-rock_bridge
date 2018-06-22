@@ -1,8 +1,8 @@
 Rock bridge
 ========
-Provides a Python script that from a taste model, generate
-a orogen task and modify a function in the taste model to make
-a bridge between both tools.
+Provides a script that from a taste model, generate
+an orogen task and modify a function in the taste model to make
+the bridge between both tools.
 
 License
 -------
