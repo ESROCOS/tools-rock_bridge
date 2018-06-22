@@ -8,4 +8,5 @@
     <license>GPLv2</license>
     <depend package="tools/config" />
     <depend package="types/base" />
+    <depend package="types/base_support" />
 </package>
