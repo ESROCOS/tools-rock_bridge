@@ -5,6 +5,7 @@
 
 #include "camera_simulator/CameraDriverBase.hpp"
 
+
 namespace camera_simulator{
 
     /*! \class CameraDriver

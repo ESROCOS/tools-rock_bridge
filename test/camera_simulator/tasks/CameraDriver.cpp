@@ -20,6 +20,8 @@ CameraDriver::~CameraDriver()
 {
 }
 
+
+
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See CameraDriver.hpp for more detailed
 // documentation about them.
@@ -54,14 +56,18 @@ void CameraDriver::updateHook()
             vec.push_back(25);
                 
         aux.setImage(vec);
+   
 
-		printf("Image generated in driver (sim): -");
+		printf("Image in driver: -");
 		std::vector<uint8_t> vec2 = aux.getImage();
 		for (int i = 0; i < 10; i++)
 			printf("%u ", vec2[i]);
 		printf("- size: %lu, sizeof %lu\n", vec2.size(), sizeof(aux));
   
 		_image.write(aux);
+
+        /*uint64_t var = 5;
+        _observation.write(var);*/
     }
 }
 void CameraDriver::errorHook()

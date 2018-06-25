@@ -3,6 +3,7 @@
 # Licence: GPLv2
 
 # Tool: rock-bridge
+cmake_minimum_required(VERSION 3.3)
 
 # Install source Python and JSON files
 install(
@@ -18,4 +19,4 @@ install(
 )
 
 # Install camera_simulator orogen
-add_subdirectory(test/camera_simulator)
+#add_subdirectory(test/camera_simulator)

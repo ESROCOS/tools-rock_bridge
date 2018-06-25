@@ -10,7 +10,6 @@ from subprocess import call
 import shutil
 
 from rockBridgeModule import bridgeModule
-
            
 if __name__ == "__main__":	
 	
