@@ -40,12 +40,12 @@ void CameraDriver::updateHook()
 {
     CameraDriverBase::updateHook();
 
-    printf("CameraDriverBase::updateHook\n");
+    printf(" - CameraDriver::updateHook\n");
 
     uint64_t var;
 	if( RTT::NoData !=  _command.read(var))
 	{
-		printf("CameraDriverBase::_command.read(var)\n");
+		printf(" - CameraDriver: frame resquest received\n");
 		
         base::samples::frame::Frame aux(4, 4);
         std::vector< uint8_t > vec;
@@ -56,16 +56,14 @@ void CameraDriver::updateHook()
         aux.setImage(vec);
    
 
-		printf("Image in driver: -");
+		printf(" - CameraDriver: generating image: -");
 		std::vector<uint8_t> vec2 = aux.getImage();
 		for (int i = 0; i < 10; i++)
 			printf("%u ", vec2[i]);
 		printf("- size: %lu, sizeof %lu\n", vec2.size(), sizeof(aux));
   
+        printf(" - CameraDriver: sending \n");
 		_image.write(aux);
-
-        /*uint64_t var = 5;
-        _observation.write(var);*/
     }
 }
 void CameraDriver::errorHook()

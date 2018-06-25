@@ -60,7 +60,7 @@ if __name__ == "__main__":
 	call(["rock-create-orogen", func_name])
 
 	if not os.path.isfile(func_name + "/manifest.xml"):
-		print('Error: ' + func_name + "/manifest.xml not found. Delete folder and rerun the script.")
+		print('Error: ' + func_name + "/manifest.xml not found. Delete " + func_name +" folder and rerun the script.")
 		sys.exit(0)
 	
 	#copy lib to function.so in install folder
