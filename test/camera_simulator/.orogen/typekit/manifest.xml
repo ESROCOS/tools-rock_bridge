@@ -1,0 +1,14 @@
+<package>
+  <description brief="camera_simulator-typekit">
+
+      camera_simulator-typekit description
+
+  </description>
+  <author></author>
+  <license></license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/camera_simulator-typekit</url>
+  <depend package="rtt"/>
+  <depend package="rtt_typelib"/>
+
+</package>

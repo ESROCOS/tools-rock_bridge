@@ -1,0 +1,17 @@
+# Generated from orogen/lib/orogen/templates/typekit/corba/transport-corba.pc
+
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos@OROCOS_PKG_DIR@/types
+includedir=${prefix}/include/orocos
+
+project_name=camera_simulator
+deffile=${prefix}/share/orogen/camera_simulator.orogen
+type_registry=${prefix}/share/orogen/camera_simulator.tlb
+
+Name: camera_simulatorCorbaTransport
+Version: 0.0
+Description: camera_simulator types support for the Orocos type system
+Libs: -L${libdir} -l@libname_corba@
+Cflags: -I${includedir}
+

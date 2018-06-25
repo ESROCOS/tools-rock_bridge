@@ -1,0 +1,16 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos
+includedir=${prefix}/include/orocos
+binfile=${prefix}/bin/orogen_default_camera_simulator__CameraDriver
+
+project_name=camera_simulator
+deffile=${prefix}/share/orogen/camera_simulator.orogen
+typekits=camera_simulator base logger std
+deployed_tasks=orogen_default_camera_simulator__CameraDriver,orogen_default_camera_simulator__CameraDriver_Logger
+deployed_tasks_with_models=orogen_default_camera_simulator__CameraDriver,camera_simulator::CameraDriver,orogen_default_camera_simulator__CameraDriver_Logger,logger::Logger
+
+Name: orogen_default_camera_simulator__CameraDriver
+Version: 0.0
+Description: the static deployment defined for the orogen_default_camera_simulator__CameraDriver deployment
+

@@ -39,34 +39,6 @@ bool CameraDriver::startHook()
 void CameraDriver::updateHook()
 {
     CameraDriverBase::updateHook();
-
-    printf("CameraDriverBase::updateHook\n");
-
-    uint64_t var;
-	if( RTT::NoData !=  _command.read(var))
-	{
-		printf("CameraDriverBase::_command.read(var)\n");
-		
-        base::samples::frame::Frame aux(4, 4);
-        std::vector< uint8_t > vec;
-        
-        for(int i = 0; i < (aux.getWidth() * aux.getHeight()); i++)
-            vec.push_back(25);
-                
-        aux.setImage(vec);
-   
-
-		printf("Image in driver: -");
-		std::vector<uint8_t> vec2 = aux.getImage();
-		for (int i = 0; i < 10; i++)
-			printf("%u ", vec2[i]);
-		printf("- size: %lu, sizeof %lu\n", vec2.size(), sizeof(aux));
-  
-		_image.write(aux);
-
-        /*uint64_t var = 5;
-        _observation.write(var);*/
-    }
 }
 void CameraDriver::errorHook()
 {

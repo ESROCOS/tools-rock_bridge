@@ -1,15 +1,10 @@
 build/*
 
-test/test_clean/*.zip
-test/test_clean/__*.aadl
-test/test_clean/*.md5
-test/test_clean/*.pro
-test/test_clean/*.old
-test/test_clean/binary.c
+test/taste_clean/*.zip
+test/taste_clean/__*.aadl
+test/taste_clean/*.md5
+test/taste_clean/*.pro
+test/taste_clean/*.old
+test/taste_clean/binary.c
 
 test/camera_simulator/build/*
-
-test/camera_simulator/templates/*
-test/camera_simulator/.orogen/*
-test/camera_simulator __orogen_/.*.swp
-

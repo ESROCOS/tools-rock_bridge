@@ -19,4 +19,4 @@ install(
 )
 
 # Install camera_simulator orogen
-#add_subdirectory(test/camera_simulator)
+add_subdirectory(test/camera_simulator)

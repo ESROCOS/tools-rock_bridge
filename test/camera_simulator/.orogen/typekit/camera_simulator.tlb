@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<typelib>
+  <enum name='/camera_simulator/CameraDriver_STATES'>
+    <value symbol='CameraDriver_EXCEPTION' value='3'/>
+    <value symbol='CameraDriver_FATAL_ERROR' value='2'/>
+    <value symbol='CameraDriver_INIT' value='0'/>
+    <value symbol='CameraDriver_PRE_OPERATIONAL' value='1'/>
+    <value symbol='CameraDriver_RUNNING' value='5'/>
+    <value symbol='CameraDriver_RUNTIME_ERROR' value='6'/>
+    <value symbol='CameraDriver_STOPPED' value='4'/>
+  <metadata key='cxxname'><![CDATA[::camera_simulator::CameraDriver_STATES]]></metadata>
+<metadata key='orogen_defining_typekits'><![CDATA[camera_simulator]]></metadata>
+<metadata key='orogen_exporting_typekits'><![CDATA[camera_simulator]]></metadata>
+<metadata key='orogen_include'><![CDATA[camera_simulator:camera_simulator/TaskStates.hpp]]></metadata>
+<metadata key='source_file_line'><![CDATA[/home/esrocos/esrocos_workspace/drivers/orogen/camera_simulator/.orogen/typekit/types/camera_simulator/TaskStates.hpp:9]]></metadata>
+
+  </enum>
+</typelib>

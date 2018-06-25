@@ -1,0 +1,23 @@
+# Generated from orogen/lib/orogen/templates/tasks/tasks.pc
+
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos
+includedir=${prefix}/include/orocos
+
+
+
+project_name=camera_simulator
+deffile=${prefix}/share/orogen/camera_simulator.orogen
+task_models=camera_simulator::CameraDriver
+typekits=camera_simulator base orocos std
+
+Name: camera_simulatorTasks
+Version: 0.0
+Description: tasks defined for the camera_simulator oroGen project
+Requires: @CAMERA_SIMULATOR_TASKLIB_REQUIRES@
+
+Libs:  -L${libdir} -lcamera_simulator-tasks-gnulinux
+
+Cflags: -I${includedir} -I/home/esrocos/esrocos_workspace/install/include -DOROCOS_TARGET=gnulinux -I/home/esrocos/esrocos_workspace/install/include/orocos -I/home/esrocos/esrocos_workspace/install/include/orocos/std/types -std=c++11 -I/usr/include/eigen3 -I/home/esrocos/esrocos_workspace/install/include/orocos/base/types -I/home/esrocos/esrocos_workspace/install/include/orocos/logger/types -I${includedir}/camera_simulator/types
+

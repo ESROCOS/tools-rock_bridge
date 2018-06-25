@@ -1,0 +1,20 @@
+/* Generated from orogen/lib/orogen/templates/typekit/corba/Types.idl */
+
+#ifndef __OROGEN_TYPEKIT_CAMERA_SIMULATOR_IDL__
+#define __OROGEN_TYPEKIT_CAMERA_SIMULATOR_IDL__
+
+
+module orogen {
+    module camera_simulator {
+        module Corba {
+            enum CameraDriver_STATES { CameraDriver_EXCEPTION, CameraDriver_FATAL_ERROR, CameraDriver_INIT, CameraDriver_PRE_OPERATIONAL, CameraDriver_RUNNING, CameraDriver_RUNTIME_ERROR, CameraDriver_STOPPED };
+
+        };
+
+    };
+
+};
+
+
+#endif
+
