@@ -1,6 +1,5 @@
 name "camera_simulator"
 
-using_library "camera_ids"
 import_types_from "base"
 
 task_context "CameraDriver" do
