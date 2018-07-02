@@ -10,4 +10,5 @@
     <depend package="types/base" />
     <depend package="types/base_support" />
     <depend package="python3-mako" />
+    <depend package="base/templates/cmake_lib" />
 </package>
