@@ -14,30 +14,22 @@ def taste2CRockType(type):
 		type = type[:1].lower() + type[1:]
 		return type.replace("_", "::")
 
-def includesType():
-	a = ""
-	for i in iv.list_ri(tasteFunc):
-		if iv.get_in_param_type_idx(tasteFunc, i, 0) not in basicTypes.keys():
-			a = "#include <base_support/" + iv.get_in_param_type_idx(tasteFunc, i, 0).replace("_", "-") + "Convert.hpp>\n"
-		
-	return a
 %>
-/* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
+/* Generated from orogen/lib/orogen/templates/tasks/Task.cpp, modified by tools/rock_bridge  */
 
 #include "${tasteFunc}_task.hpp"
 
-${includesType()}
 
 #include <thread>
 
 camera_rock_bridge::camera_rock_bridge_task * ${tasteFunc}_task_instance = NULL;
+	
+%for i in iv.list_ri(tasteFunc):
+void (*ptr_RI_aux_${i})(${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} *);
+%endfor
 
 extern "C" { 
 	extern int aadl_start(void);
-	
-	%for i in iv.list_ri(tasteFunc):
-	extern void ${tasteFunc}_RI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} *);
-	%endfor
 }
 
 using namespace ${tasteFunc};
@@ -100,15 +92,10 @@ void ${tasteFunc}_task::updateHook()
 	${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
 	if( RTT::NewData ==  _${i}.read(var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}))
 	{
-		// convert type
-		asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
-		%if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
-		asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()} = var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
-		%else:
-		asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_toAsn1(asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}, var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
-		%endif
-		// function RI TASTE
-		${tasteFunc}_RI_${i}(&asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
+		if(ptr_RI_aux_${i} != NULL)
+		{
+			ptr_RI_aux_${i}(&var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
+		}
 	}
 	
 	%endfor
@@ -127,18 +114,10 @@ void ${tasteFunc}_task::cleanupHook()
 }
 
 %for i in iv.list_pi(tasteFunc):
-void ${tasteFunc}_task::write${i.capitalize()}(asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} var)
+void ${tasteFunc}_task::write${i.capitalize()}(${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var)
 {
-	${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} varRock;
-
-	%if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
-	varRock = var;
-	%else:
-	asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_fromAsn1(varRock, var);
-	%endif
-
-	_${i}.write(varRock);
+	_${i}.write(var);
 }
-	
+
 %endfor
 

@@ -81,8 +81,8 @@ if __name__ == "__main__":
 	#generate task/CMakeLists.txt
 	print("[INFO] Updating orogen task CmakeLists.txt of " + func_name)
 	with open(str(func_name) + "/tasks/CMakeLists.txt", 'a') as file:
-		file.write('\nTARGET_LINK_LIBRARIES(${' + func_name.upper() + '_TASKLIB_NAME} \n\tbase_support \n\t' + func_name + ')\n')
-		file.writelines('TARGET_INCLUDE_DIRECTORIES(${' + func_name.upper() + '_TASKLIB_NAME} PUBLIC $ENV{AUTOPROJ_CURRENT_ROOT}/install/include ' + taste_path + '/' + func_name+'/dataview)\n')
+		file.write('\nTARGET_LINK_LIBRARIES(${' + func_name.upper() + '_TASKLIB_NAME} \n\t' + func_name + ')\n')
+		file.writelines('TARGET_INCLUDE_DIRECTORIES(${' + func_name.upper() + '_TASKLIB_NAME} PUBLIC $ENV{AUTOPROJ_CURRENT_ROOT}/install/include)\n')
 
 	#sobreescribir ficheros task
 	print("[INFO] Generating orogen task files of " + func_name)
@@ -114,13 +114,15 @@ if __name__ == "__main__":
 			file.write('\nORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/\" \n')	
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/orocos/\" \n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/orocos/lib' + func_name + '-tasks-gnulinux.so\" \n')
+			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/libbase_support.so" \n')
 	else:
 		with open(pre_init, 'x') as file:
 			file.write('#!/bin/sh\n\n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/\" \n')	
 			file.write('ORCHESTRATOR_OPTIONS+=\" -e x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/include/orocos/\" \n')
 			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/orocos/lib' + func_name + '-tasks-gnulinux.so\" \n')
-
+			file.write('ORCHESTRATOR_OPTIONS+=\" -l x86_partition:' + os.environ['AUTOPROJ_CURRENT_ROOT'] +'/install/lib/libbase_support.so" \n')
+	
 	init_last = taste_path + "/user_init_last.sh"
 	print("[INFO] Generating " + init_last)
 	if os.path.isfile(init_last):

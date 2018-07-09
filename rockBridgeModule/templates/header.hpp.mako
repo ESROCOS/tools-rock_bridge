@@ -15,7 +15,7 @@ def taste2CRockType(type):
 		type = type[:1].lower() + type[1:]
 		return type.replace("_", "::")
 %>
-/* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
+/* Generated from orogen/lib/orogen/templates/tasks/Task.hpp, modified by tools/rock_bridge */
 
 //JMSM
 
@@ -23,10 +23,6 @@ def taste2CRockType(type):
 #define ${tasteFunc.upper()}_${tasteFunc.upper()}_TASK_TASK_HPP
 
 #include "${tasteFunc}/${tasteFunc}_taskBase.hpp"
-
-#if(!defined(GENERATED_ASN1SCC_DATAVIEW_UNIQ_H) && !defined(GENERATED_ASN1SCC_dataview_uniq_H))
-#include <dataview-uniq.h>
-#endif
 
 namespace ${tasteFunc}{
 
@@ -128,7 +124,7 @@ namespace ${tasteFunc}{
         void cleanupHook();
         
         %for i in iv.list_pi(tasteFunc):
-		void write${i.capitalize()}(asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} var);
+		void write${i.capitalize()}(${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var);
 				
 		%endfor
     };
