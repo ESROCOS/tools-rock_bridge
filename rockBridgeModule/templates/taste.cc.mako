@@ -1,10 +1,11 @@
-/*
- * H2020 ESROCOS Project
- * Company: GMV Aerospace & Defence S.A.U.
- * Licence: GPLv2
-*/
-
-
+## H2020 ESROCOS Project
+## Company: GMV Aerospace & Defence S.A.U.
+## Licence: GPLv2
+##
+## Mako template to generate the TASTE function implementation for a ROCK bridge component.
+##
+<% import os %>\
+/* Generated from ${os.path.basename(context._with_template.uri)} */
 /* User code: This file will not be overwritten by TASTE. */
 
 #include "${tasteFunc}.h"
@@ -25,10 +26,10 @@ void ${tasteFunc}_startup()
 %for i in iv.list_pi(tasteFunc):
 void ${tasteFunc}_PI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}  *IN_${iv.get_in_param_idx(tasteFunc, i, 0)})
 {
-	if(${tasteFunc}_task_instance != NULL)
-	{
-		${tasteFunc}_task_instance->write${i.capitalize()}(*IN_${iv.get_in_param_idx(tasteFunc, i, 0)});
-	}
+    if(${tasteFunc}_task_instance != NULL)
+    {
+        ${tasteFunc}_task_instance->write${i.capitalize()}(*IN_${iv.get_in_param_idx(tasteFunc, i, 0)});
+    }
 }
 %endfor
 

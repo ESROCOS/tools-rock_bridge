@@ -1,29 +1,31 @@
-/*
- * H2020 ESROCOS Project
- * Company: GMV Aerospace & Defence S.A.U.
- * Licence: GPLv2
-*/
+## H2020 ESROCOS Project
+## Company: GMV Aerospace & Defence S.A.U.
+## Licence: GPLv2
+##
+## Mako template to generate the Orocos task source file for a ROCK bridge component.
+##
+<% import os %>\
+/* Generated from ${os.path.basename(context._with_template.uri)} */
+/* Derived from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 <%
 basicTypes = {'T_Boolean': 'bool', 'T_UInt8': 'uint8_t', 'T_UInt16': 'uint16_t', 'T_UInt32': 'uint32_t', 'T_UInt64': 'uint64_t', 'T_Int8': 'int8_t', 'T_Int16': 'int16_t', 'T_Int32': 'int32_t', 'T_Int64': 'int64_t', 'T_Double': 'double', 'T_Float': 'float', 'T_String': 'std/string'}
 
 def taste2CRockType(type):
-	if type in basicTypes.keys():
-		return basicTypes[type]
-	else:
-		type = type[:1].lower() + type[1:]
-		return type.replace("_", "::")
+    if type in basicTypes.keys():
+        return basicTypes[type]
+    else:
+        type = type[:1].lower() + type[1:]
+        return type.replace("_", "::")
 
 def includesType():
-	a = ""
-	for i in iv.list_ri(tasteFunc):
-		if iv.get_in_param_type_idx(tasteFunc, i, 0) not in basicTypes.keys():
-			a = "#include <base_support/" + iv.get_in_param_type_idx(tasteFunc, i, 0).replace("_", "-") + "Convert.hpp>\n"
-		
-	return a
+    a = ""
+    for i in iv.list_ri(tasteFunc):
+        if iv.get_in_param_type_idx(tasteFunc, i, 0) not in basicTypes.keys():
+            a = "#include <base_support/" + iv.get_in_param_type_idx(tasteFunc, i, 0).replace("_", "-") + "Convert.hpp>\n"
+        
+    return a
 %>
-/* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
-
 #include "${tasteFunc}_task.hpp"
 
 ${includesType()}
@@ -33,41 +35,41 @@ ${includesType()}
 camera_rock_bridge::camera_rock_bridge_task * ${tasteFunc}_task_instance = NULL;
 
 extern "C" { 
-	extern int aadl_start(void);
-	
-	%for i in iv.list_ri(tasteFunc):
-	extern void ${tasteFunc}_RI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} *);
-	%endfor
+    extern int aadl_start(void);
+    
+    %for i in iv.list_ri(tasteFunc):
+    extern void ${tasteFunc}_RI_${i}(const asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} *);
+    %endfor
 }
 
 using namespace ${tasteFunc};
 
 void load_taste()
 {
-	aadl_start();
+    aadl_start();
 }
 
 
 ${tasteFunc}_task::${tasteFunc}_task(std::string const& name, TaskCore::TaskState initial_state)
     : ${tasteFunc}_taskBase(name, initial_state)
-{	
-	if(${tasteFunc}_task_instance == NULL)
-	{
-		${tasteFunc}_task_instance = this;
-	}
-	
-	std::thread (load_taste).detach();
+{    
+    if(${tasteFunc}_task_instance == NULL)
+    {
+        ${tasteFunc}_task_instance = this;
+    }
+    
+    std::thread (load_taste).detach();
 }
 
 ${tasteFunc}_task::${tasteFunc}_task(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
     : ${tasteFunc}_taskBase(name, engine, initial_state)
 {
-	if(${tasteFunc}_task_instance == NULL)
-	{
-		${tasteFunc}_task_instance = this;
-	}
+    if(${tasteFunc}_task_instance == NULL)
+    {
+        ${tasteFunc}_task_instance = this;
+    }
 
-	std::thread (load_taste).detach();
+    std::thread (load_taste).detach();
 }
 
 ${tasteFunc}_task::~${tasteFunc}_task()
@@ -94,24 +96,24 @@ bool ${tasteFunc}_task::startHook()
 }
 void ${tasteFunc}_task::updateHook()
 {
-	${tasteFunc}_taskBase::updateHook();
+    ${tasteFunc}_taskBase::updateHook();
     
-	%for i in iv.list_ri(tasteFunc):
-	${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
-	if( RTT::NewData ==  _${i}.read(var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}))
-	{
-		// convert type
-		asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
-		%if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
-		asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()} = var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
-		%else:
-		asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_toAsn1(asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}, var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
-		%endif
-		// function RI TASTE
-		${tasteFunc}_RI_${i}(&asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
-	}
-	
-	%endfor
+    %for i in iv.list_ri(tasteFunc):
+    ${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
+    if( RTT::NewData ==  _${i}.read(var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}))
+    {
+        // convert type
+        asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
+        %if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
+        asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()} = var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()};
+        %else:
+        asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_toAsn1(asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()}, var${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
+        %endif
+        // function RI TASTE
+        ${tasteFunc}_RI_${i}(&asn1${iv.get_in_param_idx(tasteFunc, i, 0).capitalize()});
+    }
+    
+    %endfor
 }
 void ${tasteFunc}_task::errorHook()
 {
@@ -129,16 +131,16 @@ void ${tasteFunc}_task::cleanupHook()
 %for i in iv.list_pi(tasteFunc):
 void ${tasteFunc}_task::write${i.capitalize()}(asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)} var)
 {
-	${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} varRock;
+    ${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} varRock;
 
-	%if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
-	varRock = var;
-	%else:
-	asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_fromAsn1(varRock, var);
-	%endif
+    %if iv.get_in_param_type_idx(tasteFunc, i, 0) in basicTypes.keys():
+    varRock = var;
+    %else:
+    asn1Scc${iv.get_in_param_type_idx(tasteFunc, i, 0)}_fromAsn1(varRock, var);
+    %endif
 
-	_${i}.write(varRock);
+    _${i}.write(varRock);
 }
-	
+    
 %endfor
 
