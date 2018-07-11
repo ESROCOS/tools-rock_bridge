@@ -6,7 +6,6 @@
 ##
 <% import os %>\
 # Generated from ${os.path.basename(context._with_template.uri)}
-
 <%
 basicTypes = {'T_Boolean': 'bool', 'T_UInt8': 'uint8_t', 'T_UInt16': 'uint16_t', 'T_UInt32': 'uint32_t', 'T_UInt64': 'uint64_t', 'T_Int8': 'int8_t', 'T_Int16': 'int16_t', 'T_Int32': 'int32_t', 'T_Int64': 'int64_t', 'T_Double': 'double', 'T_Float': 'float', 'T_String': 'std/string'}
 
@@ -17,6 +16,7 @@ def taste2RockType(type):
         type = type[:1].lower() + type[1:]
         return type.replace("_", "/")
 %>
+
 name "${tasteFunc}"
 
 import_types_from "base"
