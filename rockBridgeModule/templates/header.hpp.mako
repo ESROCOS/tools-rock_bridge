@@ -1,23 +1,22 @@
-/*
- * H2020 ESROCOS Project
- * Company: GMV Aerospace & Defence S.A.U.
- * Licence: GPLv2
-*/
-
-
+## H2020 ESROCOS Project
+## Company: GMV Aerospace & Defence S.A.U.
+## Licence: GPLv2
+##
+## Mako template to generate the Orocos task header file for a ROCK bridge component.
+##
+<% import os %>\
+/* Generated from ${os.path.basename(context._with_template.uri)} */
+/* Derived from orogen/lib/orogen/templates/tasks/Task.hpp */
 <%
 basicTypes = {'T_Boolean': 'bool', 'T_UInt8': 'uint8_t', 'T_UInt16': 'uint16_t', 'T_UInt32': 'uint32_t', 'T_UInt64': 'uint64_t', 'T_Int8': 'int8_t', 'T_Int16': 'int16_t', 'T_Int32': 'int32_t', 'T_Int64': 'int64_t', 'T_Double': 'double', 'T_Float': 'float', 'T_String': 'std/string'}
 
 def taste2CRockType(type):
-	if type in basicTypes.keys():
-		return basicTypes[type]
-	else:
-		type = type[:1].lower() + type[1:]
-		return type.replace("_", "::")
+    if type in basicTypes.keys():
+        return basicTypes[type]
+    else:
+        type = type[:1].lower() + type[1:]
+        return type.replace("_", "::")
 %>
-/* Generated from orogen/lib/orogen/templates/tasks/Task.hpp, modified by tools/rock_bridge */
-
-//JMSM
 
 #ifndef ${tasteFunc.upper()}_${tasteFunc.upper()}_TASK_TASK_HPP
 #define ${tasteFunc.upper()}_${tasteFunc.upper()}_TASK_TASK_HPP
@@ -42,7 +41,7 @@ namespace ${tasteFunc}{
      */
     class ${tasteFunc}_task : public ${tasteFunc}_taskBase
     {
-	friend class ${tasteFunc}_taskBase;
+    friend class ${tasteFunc}_taskBase;
     protected:
 
 
@@ -63,7 +62,7 @@ namespace ${tasteFunc}{
 
         /** Default deconstructor of ${tasteFunc}_task
          */
-		~${tasteFunc}_task();
+        ~${tasteFunc}_task();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -124,9 +123,9 @@ namespace ${tasteFunc}{
         void cleanupHook();
         
         %for i in iv.list_pi(tasteFunc):
-		void write${i.capitalize()}(${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var);
-				
-		%endfor
+        void write${i.capitalize()}(${taste2CRockType(iv.get_in_param_type_idx(tasteFunc, i, 0))} var);
+                
+        %endfor
     };
 }
 
