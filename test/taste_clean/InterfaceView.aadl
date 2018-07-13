@@ -78,7 +78,7 @@ SUBCOMPONENTS
     Taste::FS_Default_Value => "compiler-option:""-fPIC""";
   };
   orocos_target : DATA DataView::TASTE_Directive {
-    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET&eq;gnulinux""";
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
   };
 END camera_rock_bridge.others;
 

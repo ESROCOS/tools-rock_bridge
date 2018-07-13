@@ -14,8 +14,8 @@ from .ivData import IvData
 
 
 def perror(msg):
-    '''Print a message to stderr'''
-    print(msg, file=sys.stderr)
+	'''Print a message to stderr'''
+	print(msg, file=sys.stderr)
 
 
 def generate_orogen(tasteFunction, ivPath):
